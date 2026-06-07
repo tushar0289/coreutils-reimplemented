@@ -69,7 +69,7 @@ size_t write_files(const char *path) {
     FILE *fp = fopen(path, "rb");
     if (fp == NULL) {
         perror("Error oepning the file");
-        exit(1);
+        return 0;
     }
 
     while ((read_bytes = fread(buffer, sizeof(char), sizeof(buffer), fp)) !=
