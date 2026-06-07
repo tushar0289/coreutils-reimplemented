@@ -22,6 +22,10 @@ int main(int argc, char **argv) {
     for (int i = 0; i < args.file_count; i++) {
         putchar('\n');
         size = write_files(args.files[i]);
+
+        if (!size)
+            continue;
+
         printf("%zu bytes read from %s", size, args.files[i]);
         total_size += size;
     }
@@ -72,6 +76,12 @@ size_t write_files(const char *path) {
            0) {
         fwrite(buffer, sizeof(char), read_bytes, stdout);
         size += read_bytes;
+    }
+
+    if (ferror(fp)) {
+        perror(path);
+        fclose(fp);
+        return 0;
     }
 
     fclose(fp);
