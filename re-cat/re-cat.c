@@ -15,15 +15,18 @@ size_t write_files(const char *path);
 int main(int argc, char **argv) {
     Arguments args = {0};
     size_t size = 0;
+    size_t total_size = 0;
 
     parse_arguments(argc, argv, &args);
 
     for (int i = 0; i < args.file_count; i++) {
         putchar('\n');
         size = write_files(args.files[i]);
+        printf("%zu bytes read from %s", size, args.files[i]);
+        total_size += size;
     }
 
-    printf("%zu bytes read.\n", size);
+    printf("Total bytes read: %zu\n", total_size);
 
     free(args.files);
     return 0;
@@ -44,19 +47,24 @@ void parse_arguments(int argc, char **argv, Arguments *args) {
     }
     args->file_count = index;
     args->files = malloc(args->file_count * sizeof(char *));
+    if (args->files == NULL) {
+        perror("Error allocating memory");
+        exit(1);
+    }
+
     for (int i = 0; i < args->file_count; i++) {
         args->files[i] = argv[i + 1];
     }
 }
 
 size_t write_files(const char *path) {
-    int read_bytes = 0;
+    size_t read_bytes = 0;
     size_t size = 0;
     char buffer[MAX_LEN];
 
     FILE *fp = fopen(path, "rb");
     if (fp == NULL) {
-        perror("Error oepning the file.");
+        perror("Error oepning the file");
         exit(1);
     }
 
