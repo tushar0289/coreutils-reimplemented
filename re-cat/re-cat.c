@@ -46,10 +46,7 @@ void parse_arguments(int argc, char **argv, Arguments *args) {
         }
     }
 
-    for (int i = 1; i < argc; i++) {
-        index++;
-    }
-    args->file_count = index;
+    args->file_count = argc - 1;
     args->files = malloc(args->file_count * sizeof(char *));
     if (args->files == NULL) {
         perror("Error allocating memory");
