@@ -31,12 +31,12 @@ int main(int argc, char **argv) {
                 continue;
             }
 
-            printf("%zu bytes read from %s\n", size, args.files[i]);
+            printf("\n%zu bytes written from %s\n", size, args.files[i]);
             total_size += size;
         }
     }
 
-    printf("Total bytes read: %zu\n", total_size);
+    printf("Total bytes written: %zu\n", total_size);
 
     free(args.files);
     return 0;
