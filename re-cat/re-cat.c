@@ -72,7 +72,7 @@ int parse_arguments(int argc, char **argv, Arguments *args) {
     }
 
     if (args->help)
-        return 1;
+        return 0;
 
     args->file_count = argc - track_options - 1;
 
@@ -87,6 +87,7 @@ int parse_arguments(int argc, char **argv, Arguments *args) {
             args->files[i] = argv[i + 1 + track_options];
         }
     }
+    return 1;
 }
 
 size_t write_files(const char *path, Arguments *args) {
