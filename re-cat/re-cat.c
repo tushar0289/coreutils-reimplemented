@@ -166,13 +166,18 @@ void parse_long_option(int index, char **argv, Arguments *args) {
 
 void parse_short_option(int index, char **argv, Arguments *args) {
     char *options = argv[index];
-    puts(options);
-    printf("%zu\n", strlen(options));
 
     for (int i = 1; i < strlen(options); i++) {
-        switch (options[1]) {
+        switch (options[i]) {
         case 'n':
             args->line_numbers = 1;
+            break;
+        case 'h':
+            args->help = 1;
+            break;
+        default:
+            fprintf(stderr, "-%c: No matching argument.\n", options[i]);
+            exit(1);
         }
     }
 }
