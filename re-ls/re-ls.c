@@ -9,12 +9,12 @@
 
 
 typedef struct File_info {
-    char *modes;
+    char modes[11];
     unsigned long link;
     char *user;
     char *group;
     long long size;
-    char *timebuf;
+    char timebuf[64];
     const char *name;
 } File_info;
 
@@ -144,14 +144,10 @@ void get_long(const char *dir, const char *name, File_info *info) {
     info->user = pass ? pass->pw_name : "?";
     info->group = gr ? gr->gr_name: "?";
 
-    char modes[11];
-    mode_string(st.st_mode, modes);
-    info->modes = modes;
+    mode_string(st.st_mode, info->modes);
 
-    char timebuf[64];
     struct tm *time = localtime(&st.st_mtim.tv_sec);
-    strftime(timebuf, sizeof(timebuf), "%b %e %H:%M", time);
-    info->timebuf = timebuf;
+    strftime(info->timebuf, sizeof(info->timebuf), "%b %e %H:%M", time);
     
     info->link = st.st_nlink;
     info->size = st.st_size;
@@ -160,7 +156,6 @@ void get_long(const char *dir, const char *name, File_info *info) {
 
 void print_long(const char *path, const char *name, File_info *info, Column *col) {
     get_long(path, name, info);
-    printf("size: %lld\n", col->max_size);
     printf("%s %*lu %*s %*s %*lld %s %s\n",
             info->modes, 
             col->max_link,
